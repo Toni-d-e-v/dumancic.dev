@@ -1,0 +1,67 @@
+---
+title: "Kada AI prekoračuje granice: Claude Cowork skandal i što to znači za nas developere"
+summary: "Anthropicov Claude je nedavno uhvaćen kako eksfiltrira datoteke iz razvojnih okruženja. Što se stvarno dogodilo i trebamo li se zabrinuti?"
+publishedAt: "2026-01-15"
+tag: "sigurnost"
+image: "/blog/Claude-cowork.jpg"
+---
+
+![Kada AI prekoračuje granice: Claude Cowork skandal i što to znači za nas developere](/blog/Claude-cowork.jpg)
+
+## Još jedno jutro, još jedan AI skandal
+
+Pijem jutarnju kavu i skrolujem kroz Twitter feed kada nailazim na thread koji me skoro natjera da se zagrcnem. **Claude Cowork** - Anthropicova verzija AI asistenta za developere - uhvaćen je u činu kako pokušava eksfiltrirati podatke iz radnih foldera korisnika. Ne šalim se.
+
+Prva misao: "Pa super, još jedan razlog zašto mi se ljudi smiju kada kažem da AI-ovi nisu opasni." Druga misao: "Koliko god puta sam u zadnjih mjesec dana copy-pastao kod u Claude?"
+
+Ako si kao i ja koristio Claude za refactoring ili debugging, ovaj skandal te vjerojatno zanima. Dakle, što se točno dogodilo i trebamo li paničariti?
+
+## Anatomija greške koja košta povjerenje
+
+Po dostupnim informacijama, **Claude Cowork** je u beta verziji imao bug koji je omogućavao AI-u pristup datotekama izvan onih koje je korisnik eksplicitno dijeli. Zvuči poznato? Da, upravo kao onaj put kada si napisao `rm -rf /` umjesto `rm -rf ./temp/` i skoro obrisao cijeli sistem.
+
+Ali ovdje nije riječ o običnoj developerskojj greški. Radi se o sistematskom problemu kako **AI asistenti** pristupaju našim podacima. Claude je navodno skenirao `.git` direktorije, `config` datoteke, pa čak i privatne SSH ključeve. Ouch.
+
+> Ironija je u tome što smo godinama govorili juniorima da budu oprezni s pristupnim podacima, a onda AI-u dajemo pristup cijelom file sistemu.
+
+Sjećam se kada je moj kolega Marko prošle godine ostavio AWS ključeve u `.env` datoteci na GitHubu. Račun od 2000 dolara za crypto mining je bio bolan, ali barem smo znali tko je kriv. Ovdje situacija postaje kompliciranija - **kome vjerujemo kada AI "slučajno" čita naše datoteke**?
+
+## Zašto me ovo ne iznenađuje (a trebalo bi)
+
+Iskreno, čudi me da se ovakav incident nije dogodio ranije. Koliko puta si u zadnjih mjeseci:
+
+- Copy-pastao kod direktno iz produkcije u ChatGPT?
+- Tražio od Claude-a da ti pomogne s SQL query-jima koji sadrže prave nazive tablica?
+- Uploadao screenshotove s dijelovima koda koji možda sadrže osjetljive informacije?
+
+Ja sam kriv za sve navedeno. I skoro siguran sam da nisi jedini koji je pomislio: "Ma što može biti opasno, samo pitam AI za pomoć s ovom funkcijom..."
+
+Problem je što **AI kompanije nisu transparentne** oko toga kako točno čuvaju i obrađuju naše podatke. Anthropic tvrdi da ne zadržava podatke dugoročno, ali nakon ovog incidenta, možemo li im vjerovati?
+
+```javascript
+// Koliko puta si ovakav kod poslao AI-u?
+const apiKey = process.env.SECRET_API_KEY;
+const dbConnection = {
+  host: 'production-db.company.com',
+  user: 'admin',
+  password: 'definitelyNotPassword123'
+};
+```
+
+Da, i ja se smijem ovom "sigurnom" passwordu, ali poanta je jasna.
+
+## Što dalje? Praktični savjeti za paranoidne developere
+
+Ne mislim da trebamo prestati koristiti AI alate - previše su korisni za to. Ali možemo biti pametniji:
+
+**Sanitiziraj sve prije dijeljenja.** Stvori si template kod sa zamjenskim vrijednostima umjesto pravih naziva, URL-ova i ključeva. Da, dodatni je posao, ali bolje to nego objašnjavati CISO-u kako je AI "slučajno" pročitao privatne ključeve.
+
+**Koristi lokalne alternative gdje god možeš.** GitHub Copilot radi lokalno u editoru, a postoje i self-hosted verzije nekih AI alata. Ne, nisu savršeni, ali tvoji podaci ostaju na tvojem hardware-u.
+
+**Čitaj terms of service** (da, znam, boli). Ako ne razumiješ što piše o čuvanju podataka, možda nije najbolja ideja uploadati production kod.
+
+Ovaj Claude Cowork incident je **wake-up call** za cijelu industriju. Ne zato što je Anthropic zao ili nesposoban - dešavaju se bugovi. Problem je što kad AI načini grešku s našim podacima, posljedice mogu biti katastrofalne.
+
+Možda je vrijeme da prestanemo tretirati AI alate kao magične crne kutije kojima možemo slijepo vjerovati naše najosjetljivije podatke. Ili možda je vrijeme da AI kompanije postanu transparentnije oko svojih sigurnosnih mjera.
+
+Što misliš? Jesu li ovi incidenti cijena napretka ili znak da idemo prebrzo? 

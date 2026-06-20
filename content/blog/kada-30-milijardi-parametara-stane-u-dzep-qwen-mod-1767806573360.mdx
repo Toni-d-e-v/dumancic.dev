@@ -1,0 +1,32 @@
+---
+title: "Kada 30 milijardi parametara stane u džep: Qwen model na Raspberry Pi mijenja pravila igre"
+summary: "Revolucionarni proboj u području umjetne inteligencije - pokretanje naprednog Qwen modela s 30 milijardi parametara na jednostavnom Raspberry Pi računalu u stvarnom vremenu otvara nova vrata pristupačnoj AI tehnologiji."
+publishedAt: "2026-01-07"
+tag: "tehnologija"
+---
+
+Zamislite scenarij koji je još prije nekoliko godina zvučao kao znanstvena fantastika: uzimate model umjetne inteligencije s impresivnih 30 milijardi parametara - veličine koja je donedavno zahtijevala industrijske servere vrijedne stotina tisuća kuna - i uspješno ga pokretate na malom Raspberry Pi računalu koje košta nekoliko stotina kuna. Upravo se to dogodilo s najnovijim Qwen modelom, što predstavlja paradigmatsku promjenu u svijetu dostupne umjetne inteligencije.
+
+Qwen, razvijen od strane Alibaba Clouda, pripada novoj generaciji velikih jezičnih modela koji su optimizirani za efikasnost bez žrtvovanja performansi. Model s 30 milijardi parametara tradicionalno zahtijeva ogromne količine memorije i procesorske moći, što ga čini nedostupnim prosječnim korisnicima. Međutim, kombinacija naprednih tehnika optimizacije i sve moćnijih malih računala omogućila je ovaj nevjerojatan proboj.
+
+Raspberry Pi, originally dizajniran kao edukativan alat za učenje programiranja, evoluirao je u moćnu platformu koja se koristi u širokom spektru aplikacija - od kućnih automatizacija do industrijskim projektima. Najnovije generacije ovih malih računala, posebno Raspberry Pi 5, dolaze s 8GB RAM-a i ARM Cortex procesorima koji su znatno moćniji od svojih prethodnika. Ipak, pokretanje 30B parametarskog modela ostaje tehnički izazov koji zahtijeva sofisticirane optimizacije.
+
+Ključ uspjeha leži u nekoliko inovativnih pristupa. Kvantizacija, proces smanjivanja preciznosti brojeva koji predstavljaju parametre modela, dramatično smanjuje memorijske zahtjeve. Umjesto korištenja standardnih 32-bitnih floating point brojeva, model koristi 4-bitne ili čak 1-bitne reprezentacije, smanjujući memorijski otisak za faktor od 8 do 32. Ova tehnika, u kombinaciji s pametnim algoritmima kompresije, omogućuje da se ogromni model stisne u ograničenu memoriju Raspberry Pi-ja.
+
+Druga ključna inovacija je dinamično učitavanje parametara. Umjesto držanja cijelog modela u memoriji odjednom, sistem učitava samo one dijelove koji su trenutno potrebni za izvršavanje zadatka. Ova tehnika, poznata kao "model sharding" ili "lazy loading", omogućuje pokretanje modela koji je veći od dostupne memorije, iako uz nešto sporije vrijeme odziva.
+
+Performanse ovog setup-a su impresivne. Model uspijeva generirati tekst brzinom od nekoliko tokena po sekundi, što je dovoljno za mnoge praktične aplikacije. Dok nije brz kao pokretanje na specializiranim GPU-ovima, brzina je više nego zadovoljavajuća za lokalne aplikacije, chatbotove, pomoćnike za pisanje ili obrazovne alate.
+
+Praktične implikacije ovog dostignuća su dalekosežne. Prvo, democratizacija AI tehnologije postaje stvarnost. Studenti, hobbisti i mali razvojni timovi sada mogu eksperimentirati s naprednim jezičnim modelima bez potrebe za skupom infrastrukturom. Ovo otvara vrata inovacijama koje nastaju u garažama i akademskim laboratorijima, a ne samo u velikim tehnološkim korporacijama.
+
+Drugo, privatnost i sigurnost podataka dobivaju novu dimenziju. Pokretanje AI modela lokalno znači da vaši podaci ne moraju napuštati vaš uređaj. Za osjetljive aplikacije u medicini, pravu ili privatnom sektoru, ova mogućnost predstavlja ogromnu prednost. Nema potrebe za slanjem podataka u cloud servise, što eliminira rizike od curenja informacija ili kršenja privatnosti.
+
+Treće, offline funkcionalnost postaje moguća. Model koji radi lokalno ne ovisi o internetskoj vezi, što je ključno za aplikacije u udaljenim područjima ili situacijama gdje je povezivost ograničena. Ovo je posebno važno za obrazovne aplikacije u zemljama u razvoju ili za industrijske aplikacije u izoliranim okruženjima.
+
+Izazovi i ograničenja ipak postoje. Model koji radi na Raspberry Pi-ju neće biti brz kao onaj na profesionalnom serveru. Složeni zadaci koji zahtijevaju duboku analizu mogu potrajati značajno duže. Također, memorijska ograničenja znače da model možda neće moći održavati vrlo duge razgovore ili raditi s velikim dokumentima odjednom.
+
+Budućnost ove tehnologije izgleda obećavajuće. S obzirom na stalnu minijaturizaciju i povećanje moći procesora, možemo očekivati da će lokalno pokretanje sve većih modela postati uobičajeno. Edge computing, paradigma gdje se obrada podataka odvija na mjestu nastanka podataka a ne u centralnim data centrima, dobiva novu dimenziju s ovim mogućnostями.
+
+Za Croatian tech zajednicu, ovaj razvoj predstavlja priliku za inovaciju. Lokalni startupovi mogu razvijati aplikacije koje kombiniraju naprednu AI funkcionalnost s lokalnim izvršavanjem, što ih čini konkurentnijima na globalnom tržištu. Obrazovne institucije mogu integrirati ove tehnologije u svoje kurikulume, pripremajući studente za budućnost gdje je AI tehnologija sveprisutna i dostupna.
+
+Pokretanje Qwen 30B modela na Raspberry Pi-ju nije samo tehnički kuriozitet - to je signal o fundamentalnoj promjeni u načinu na koji pristupamo umjetnoj inteligenciji. AI prestaje biti ekskluzivno vlasništvo velikih korporacija i postaje alat dostupan svima. Ova demokratizacija će vjerojatno ubrzati inovacije i dovesti do razvoja aplikacija o kojima danas možemo samo sanjati.

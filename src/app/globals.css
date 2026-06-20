@@ -1,0 +1,753 @@
+:root {
+  --accent: #e8502e;
+  --accent-2: #f26b45;
+  --bg: #f2f1ee;
+  --ink: #0e0e0e;
+
+  /* fluid spacing tokens (mobile-first) */
+  --pad-x: clamp(16px, 5vw, 24px);
+  --section-gap: clamp(56px, 11vw, 110px);
+  --card-pad: clamp(20px, 5vw, 30px);
+  --nav-h: 86px; /* approx sticky nav height for anchor offset */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* keep anchored headings clear of the sticky nav */
+  scroll-padding-top: calc(var(--nav-h) + 12px);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-hanken), -apple-system, system-ui, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* never let words/media force horizontal scroll */
+h1,
+h2,
+h3,
+p,
+blockquote,
+li,
+figcaption,
+span {
+  overflow-wrap: break-word;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+@keyframes dd-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+::selection {
+  background: var(--accent);
+  color: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .dd-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ============ NAVIGATION ============ */
+
+/* sticky wrapper — tightens on scroll */
+.dd-navwrap {
+  position: sticky;
+  top: 16px;
+  z-index: 50;
+  padding: 0 var(--pad-x);
+  transition: top 0.25s ease;
+}
+.dd-navwrap--scrolled {
+  top: 10px;
+}
+
+/* the pill */
+.dd-nav {
+  max-width: 1320px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-radius: 999px;
+  padding: 12px 14px 12px 28px;
+  color: #fff;
+  background: linear-gradient(180deg, #242221 0%, #131211 58%, #080807 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.7), 0 12px 28px -8px rgba(14, 14, 14, 0.3),
+    0 4px 10px -4px rgba(14, 14, 14, 0.2);
+  transition: padding 0.25s ease, box-shadow 0.25s ease;
+}
+.dd-nav--scrolled {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.8), 0 16px 34px -10px rgba(14, 14, 14, 0.45),
+    0 6px 14px -6px rgba(14, 14, 14, 0.35);
+}
+@media (min-width: 640px) {
+  .dd-nav {
+    padding-left: 34px;
+  }
+}
+
+/* desktop center links: shown >= 920px */
+.dd-nav-links {
+  display: none;
+}
+@media (min-width: 920px) {
+  .dd-nav-links {
+    display: flex;
+  }
+}
+
+/* desktop "Schedule a call" pill: shown >= 920px */
+.dd-nav-cta {
+  display: none;
+}
+@media (min-width: 920px) {
+  .dd-nav-cta {
+    display: inline-flex;
+  }
+}
+
+/* hamburger: shown < 920px only.
+   !important so it beats .dd-burger-btn's display (declared later in the file). */
+.dd-burger {
+  display: inline-flex;
+}
+@media (min-width: 920px) {
+  .dd-burger {
+    display: none !important;
+  }
+}
+
+/* logo never dominates a narrow bar; shrinks on scroll */
+.dd-logo {
+  height: 22px;
+  width: auto;
+  max-width: 56vw;
+  display: block;
+  transition: height 0.25s ease;
+}
+.dd-nav--scrolled .dd-logo {
+  height: 18px;
+}
+
+/* ============ FLUID LAYOUT HELPERS ============ */
+
+/* horizontal-constrained section with safe-area-aware side padding */
+.dd-section {
+  width: 100%;
+  max-width: 1320px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: max(var(--pad-x), env(safe-area-inset-left));
+  padding-right: max(var(--pad-x), env(safe-area-inset-right));
+}
+.dd-section--narrow {
+  max-width: 980px;
+}
+.dd-section--tight {
+  max-width: 760px;
+}
+
+/* bottom rhythm between sections */
+.dd-gap {
+  padding-bottom: var(--section-gap);
+}
+
+/* tap-friendly button base (>= 44px target) */
+.dd-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  text-decoration: none;
+}
+
+/* hero bento: four tiles stacked on mobile, 2x2 grid >= 760px.
+   minmax(0,...) prevents the real <img> inside a tile from blowing the
+   track (and the whole page) wider than the viewport. */
+.dd-hero-bento {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+}
+@media (min-width: 760px) {
+  .dd-hero-bento {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    grid-template-areas:
+      "work founder"
+      "stats reco";
+    gap: 20px;
+  }
+  .dd-bento-work {
+    grid-area: work;
+  }
+  .dd-bento-founder {
+    grid-area: founder;
+  }
+  .dd-bento-stats {
+    grid-area: stats;
+  }
+  .dd-bento-reco {
+    grid-area: reco;
+  }
+}
+
+/* compact 2x2 number grid inside the stats tile */
+.dd-bento-statgrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(16px, 2.4vw, 28px);
+}
+
+/* ============ AURORA (ambient card background) ============ */
+/* per-blob drift; --dx/--dy/--bscale are set inline per blob (see Aurora.tsx) */
+@keyframes dd-aurora-blob {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(var(--dx, 0), var(--dy, 0), 0) scale(var(--bscale, 1.3));
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* drifting diagonal lines (Contact). Stripes are axis-aligned inside a rotated
+   layer and shift by exactly one 30px period, so the loop is always seamless. */
+@keyframes dd-lines {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 30px 0;
+  }
+}
+
+/* drop in as the first child of a position:relative; overflow:hidden card */
+.dd-aurora {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.dd-aurora-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(30px);
+  will-change: transform;
+  animation-name: dd-aurora-blob;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+/* ============ ACCORDION (Services + FAQ dropdowns) ============ */
+/* grid-template-rows 0fr->1fr animates height without knowing content height */
+.dd-acc-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.32s ease;
+}
+.dd-acc-panel.open {
+  grid-template-rows: 1fr;
+}
+.dd-acc-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+/* + glyph rotates to × on open */
+.dd-acc-ind {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: transform 0.3s ease;
+}
+.dd-acc-ind.open {
+  transform: rotate(45deg);
+}
+
+/* hero "Recognized at" logos: muted grayscale, colorize on hover */
+.dd-reco-logo {
+  height: 34px;
+  width: auto;
+  max-width: 160px;
+  object-fit: contain;
+  opacity: 0.7;
+  filter: grayscale(1);
+  transition: opacity 0.2s ease, filter 0.2s ease;
+}
+.dd-reco-logo:hover {
+  opacity: 1;
+  filter: grayscale(0);
+}
+/* per-logo size tuning */
+.dd-reco-logo--sm {
+  height: 28px;
+}
+.dd-reco-logo--lg {
+  height: 48px;
+  max-width: 220px;
+}
+/* white-source logos: render solid black so they show on the light card */
+.dd-reco-logo--invert,
+.dd-reco-logo--invert:hover {
+  filter: brightness(0);
+}
+
+/* ============ /ABOUT GRIDS ============ */
+/* skills: 1 col mobile -> 2x2 desktop (no orphan stretch) */
+.dd-about-skills {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 640px) {
+  .dd-about-skills {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+/* awards: flex so the last odd item centers instead of stretching full width */
+.dd-about-awards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+}
+.dd-about-awards > * {
+  flex: 0 1 calc(50% - 7px);
+}
+@media (max-width: 560px) {
+  .dd-about-awards > * {
+    flex-basis: 100%;
+  }
+}
+
+/* ============ /ABOUT EXPERIENCE TIMELINE ============ */
+.dd-timeline {
+  position: relative;
+  padding-left: 40px;
+}
+.dd-timeline-rail {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  pointer-events: none;
+}
+.dd-timeline-line {
+  position: absolute;
+  left: 19px;
+  top: 10px;
+  bottom: 10px;
+  width: 2px;
+  border-radius: 2px;
+  background: rgba(14, 14, 14, 0.12);
+}
+.dd-timeline-node {
+  position: absolute;
+  left: 13px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #cfc9c0;
+  transform: translateY(-50%);
+  transition: background 0.3s ease;
+}
+.dd-timeline-node.active {
+  background: var(--accent);
+}
+/* the glowing light that glides to — and rests on — the active card */
+.dd-timeline-light {
+  position: absolute;
+  left: 11px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 18px 5px rgba(232, 80, 46, 0.6),
+    0 0 6px 1px rgba(232, 80, 46, 0.9);
+  transform: translateY(-50%);
+  transition: top 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.dd-timeline-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* drifting diagonal lines layer (Contact). Oversized + rotated so the
+   axis-aligned stripes read as a diagonal and the rotation never reveals edges. */
+.dd-lines {
+  position: absolute;
+  inset: -75%;
+  z-index: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    to right,
+    rgba(24, 24, 24, 0.158) 0 2px,
+    transparent 2px 30px
+  );
+  transform: rotate(28deg);
+  animation: dd-lines 1s linear infinite;
+}
+
+
+/* services grid: sidebar >= 880px */
+.dd-svc-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(24px, 4vw, 48px);
+}
+@media (min-width: 880px) {
+  .dd-svc-grid {
+    grid-template-columns: minmax(0, 220px) 1fr;
+  }
+}
+
+/* services / faq open-panel indent shrinks on mobile */
+.dd-svc-panel {
+  padding: 0 4px 28px 62px;
+}
+@media (max-width: 560px) {
+  .dd-svc-panel {
+    padding: 0 2px 22px 16px;
+  }
+}
+
+/* chip grid: 2 cols >= 560px */
+.dd-chip-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 560px) {
+  .dd-chip-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* contact grid: 2 cols >= 880px */
+.dd-contact-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 64px);
+  align-items: center;
+}
+@media (min-width: 880px) {
+  .dd-contact-grid {
+    grid-template-columns: minmax(0, 520px) minmax(0, 1fr);
+  }
+}
+
+/* project rows: split >= 760px */
+.dd-proj {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(20px, 5vw, 36px);
+  align-items: center;
+}
+@media (min-width: 760px) {
+  .dd-proj {
+    grid-template-columns: minmax(0, 440px) 1fr;
+  }
+}
+
+/* featured-work blurb: compact on mobile, larger on desktop to fill the gap */
+.dd-feature-blurb {
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+@media (min-width: 760px) {
+  .dd-feature-blurb {
+    font-size: clamp(17px, 1.3vw, 20px);
+    line-height: 1.6;
+  }
+}
+
+/* featured-work "Read case study" arrow: fills + rotates right on hover */
+.dd-case-arrow {
+  border: 1px solid rgba(232, 80, 46, 0.35);
+  color: var(--accent);
+  transition: transform 0.25s ease, background 0.25s ease,
+    border-color 0.25s ease, color 0.25s ease;
+}
+.dd-case-link:hover .dd-case-arrow {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  transform: rotate(45deg);
+}
+.dd-case-link:active .dd-case-arrow {
+  transform: rotate(45deg) scale(0.9);
+}
+
+/* generic auto-fit grids */
+.dd-grid-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+@media (min-width: 640px) {
+  .dd-grid-stats {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+  }
+}
+.dd-grid-quotes {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 620px) {
+  .dd-grid-quotes {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+}
+.dd-grid-awards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+@media (min-width: 620px) {
+  .dd-grid-awards {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+  }
+}
+.dd-grid-posts {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 640px) {
+  .dd-grid-posts {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+}
+.dd-grid-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 600px) {
+  .dd-grid-cards {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+}
+.dd-grid-footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
+@media (min-width: 600px) {
+  .dd-grid-footer {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 32px;
+  }
+}
+
+/* about header: photo + intro side by side >= 720px */
+.dd-about-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+@media (min-width: 720px) {
+  .dd-about-head {
+    grid-template-columns: minmax(0, 280px) 1fr;
+    gap: 44px;
+  }
+}
+
+/* contact info pair: stacks on small screens */
+.dd-contact-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+@media (max-width: 520px) {
+  .dd-contact-info {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* hover helpers */
+.dd-link-hover:hover {
+  color: var(--accent) !important;
+}
+.dd-link-hover-light {
+  transition: color 0.15s ease;
+}
+.dd-link-hover-light:hover {
+  color: #fff !important;
+}
+.dd-social-btn {
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.dd-social-btn:hover {
+  background: rgba(255, 255, 255, 0.14) !important;
+  border-color: rgba(255, 255, 255, 0.28) !important;
+}
+.dd-card-hover {
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.dd-card-hover:hover {
+  border-color: rgba(14, 14, 14, 0.22) !important;
+}
+.dd-btn-accent {
+  transition: filter 0.2s ease;
+}
+.dd-btn-accent:hover {
+  filter: brightness(1.06);
+}
+
+/* ============ SCROLL REVEAL ============ */
+.dd-reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  will-change: opacity, transform;
+}
+.dd-reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ============ MOBILE MENU DRAWER ============ */
+.dd-burger-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  cursor: pointer;
+  padding: 0;
+}
+.dd-burger-btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+.dd-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgba(8, 8, 7, 0.5);
+  backdrop-filter: blur(2px);
+  animation: dd-fade 0.18s ease;
+}
+.dd-drawer {
+  position: fixed;
+  z-index: 100;
+  top: calc(12px + env(safe-area-inset-top));
+  left: 12px;
+  right: 12px;
+  background: linear-gradient(180deg, #242221 0%, #131211 58%, #080807 100%);
+  border-radius: 28px;
+  padding: 18px 18px calc(18px + env(safe-area-inset-bottom));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 24px 50px -16px rgba(0, 0, 0, 0.6);
+  color: #fff;
+  animation: dd-pop 0.2s ease;
+}
+.dd-drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.dd-drawer-link {
+  display: flex;
+  align-items: center;
+  min-height: 52px;
+  padding: 0 8px;
+  font-size: 19px;
+  font-weight: 600;
+  color: #edeae5;
+  text-decoration: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.dd-drawer-link:first-of-type {
+  border-top: none;
+}
+@keyframes dd-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes dd-pop {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

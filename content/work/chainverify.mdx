@@ -1,0 +1,48 @@
+---
+title: "ChainVerify: Blockchain-Powered Document Verification"
+publishedAt: "2025-05-20"
+summary: "A decentralized SaaS platform that enables secure, verifiable document issuance on-chain, bridging institutional trust with Web3 transparency."
+images:
+  - "/images/projects/chainverify/toni-pres.jpg"
+team:
+  - name: "Toni Dumancic"
+    role: "Lead Blockchain Developer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/toni-dumancic/"
+link: "https://cert-hub.org/"
+---
+
+## Overview
+
+At **MoneyMotion 2025**, we presented **ChainVerify**, our flagship product under the **CertHub** brand — a blockchain-based platform for issuing, managing, and verifying documents with cryptographic integrity.
+
+ChainVerify simplifies digital document trust for institutions and their users. From diplomas to legal certificates, every issued file is anchored on-chain with an immutable fingerprint, enabling instant public verification without intermediaries.
+
+## Key Features
+
+- **Web Dashboard for Institutions**: Onboarding flow with KYC, keypair generation, and document issuance limits via subscriptions.
+- **Decentralized Verification**: Each document hash is published on-chain, making validation possible even if CertHub ceases operations.
+- **API Access for Developers**: Secure API key system allowing programmatic document issuance and verification.
+- **Proof of Authenticity**: PDF downloads include embedded QR codes that link to on-chain proof records.
+- **SaaS Billing Layer**: Monthly plans with capped documents and automatic blockchain fee handling behind the scenes.
+
+## Technologies Used
+
+- **Solana** (or other): For low-cost, high-speed transaction publishing.
+- **Next.js**: Frontend framework for dashboard + public explorer.
+- **Node.js + Express**: Backend middleware for blockchain interactions and API authentication.
+- **PostgreSQL + Supabase**: User + document data storage.
+- **Tailwind CSS**: Clean, responsive design system across components.
+- **Fleek/IPFS**: Permanent storage layer for documents (optional).
+
+## Challenges and Learnings
+
+We had to strike a balance between **UX simplicity** and **blockchain complexity**. Institutions were not Web3-native, so we abstracted away wallets, signing, and gas — while still ensuring cryptographic integrity behind every action.
+
+We also learned the importance of scalable architecture, building around a **multi-tenant SaaS model** that supports future whitelabel use cases or region-specific regulation compliance.
+
+## Outcome
+
+ChainVerify is now in **active pilot with multiple universities and government offices in Bosnia and Herzegovina**. Its presentation at **MoneyMotion 2025** drew interest from fintech VCs and compliance startups.
+
+We’re currently onboarding design partners and working on broader integrations with academic institutions and identity providers.

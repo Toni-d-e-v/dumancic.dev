@@ -1,0 +1,21 @@
+# dependencies
+node_modules
+
+# next.js
+.next
+/out
+
+# production / deploy
+.vercel
+
+# build artifacts
+*.log
+tsconfig.tsbuildinfo
+next-env.d.ts
+
+# env
+.env*
+!.env.example
+
+# os
+.DS_Store

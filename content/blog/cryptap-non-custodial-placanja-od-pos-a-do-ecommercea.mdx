@@ -1,0 +1,40 @@
+---
+title: "CrypTap: kako sam izgradio non-custodial crypto payment platformu — od POS uređaja do e-commercea"
+summary: "Iza CrypTapa stoji jednostavna ideja: trgovac prima kripto uplate, a nitko — ni mi — nikada ne drži njegov novac. Ovo je priča o arhitekturi koja to omogućuje: pametni ugovori na 7 EVM chainova i Solani, BLE hardverski uređaj za potpisivanje, hosted checkout i settlement bez povjerenja."
+publishedAt: "2026-07-15"
+tag: "Web3"
+---
+
+## Problem s kripto plaćanjima
+
+Većina "accept crypto" rješenja su zapravo kripto banke: primaju uplatu u svoje ime, drže sredstva i isplaćuju trgovca kad (i ako) žele. To je custody — i to je točno ono što kripto plaćanja ne bi trebala biti.
+
+**CrypTap** sam gradio oko jedne nepovredive invarijante: **platforma nikada ne drži, ne potpisuje niti prenosi sredstva trgovca.** Sve što dira novac događa se client-side i on-chain; backend samo prati "payment intente" i provjerava njihov status na chainu.
+
+## In-store: POS + hardverski uređaj
+
+Za fizičke trgovine platforma ima **merchant dashboard** — potpuno client-side web aplikaciju koja kreira invoice ugovore, prati uplate uživo, računa napojnice, porez i konverziju u fiat, i settla direktno iz browsera.
+
+Najzanimljiviji dio je **CrypTap uređaj**: BLE hardverski terminal (ESP32) koji se upari s dashboardom i **potpisuje transakcije na samom uređaju** — privatni ključ nikada ne dodiruje browser. Kupac skenira QR kod, plati iz bilo kojeg walleta, i status se potvrdi direktno s chaina.
+
+## On-chain dizajn
+
+- **EVM (7 chainova):** Polygon, Ethereum, BSC, Arbitrum, Optimism, Avalanche i Base. Umjesto skupog deploya po računu, `InvoiceV2` factory radi **minimal-proxy clone** (~200k gasa po invoiceu), a adresa za uplatu je **CREATE2-predvidljiva** — postoji i prije nego što je išta deployano.
+- **Solana:** Anchor program s PDA-om po invoiceu, podržava SOL i SPL tokene.
+
+## E-commerce: settlement bez povjerenja
+
+Online trgovine razbijaju dvije pretpostavke POS-a: nema uređaja s ključem na blagajni i nema čovjeka koji klika "settle". Rješenje je **CrypTap Commerce**:
+
+- **Hosted checkout** + REST API s API ključevima i potpisanim webhookovima
+- **`CommerceSettler` ugovor po chainu** koji adresu invoicea izvodi deterministički iz parametara plaćanja. Keeper koji preda krive parametre izračuna adresu na kojoj nema sredstava — pa settlement **ne treba nikakav potpis ni atestaciju**
+- **On-chain gas tank** — trgovac sam ufinancira gas za svoje settlemente, a keeper dobiva naknadu on-chain samo kada je settle stvarno isplatio sredstva
+- **WooCommerce i Shopify pluginovi** + `commerce-js` SDK za custom integracije
+
+## Što sam naučio
+
+1. **Invarijante su bolje od featurea.** "Nikad ne držimo sredstva" je odluka koja je dizajnirala pola sustava umjesto mene.
+2. **Determinizam pobjeđuje potpise.** Kad se adresa izvodi iz parametara, krivi parametri se sami kažnjavaju — nema što hakirati.
+3. **Hardver mijenja igru.** Ključ na BLE uređaju umjesto u browseru je razlika između demo projekta i nečega što trgovac smije koristiti.
+
+Cijeli projekt — pametni ugovori (Foundry + Anchor), POS, dashboardi, checkout, backend i firmware integracija — detaljnije je opisan u [work sekciji](/work/cryptap).

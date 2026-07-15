@@ -166,10 +166,10 @@ export const footerCols = [
   {
     title: "Work",
     links: [
+      { t: "CrypTap", h: "/work/cryptap" },
       { t: "TAPP", h: "/work/tapp" },
       { t: "LetsGo Fitness", h: "/work/letsgoapp" },
       { t: "SolarSurge", h: "/work/solarsurge" },
-      { t: "AI Mostar", h: "/work/aimostar" },
     ],
   },
   {
@@ -285,20 +285,21 @@ export const about = {
 
 /** The single hero "Featured project" highlight. */
 export const featuredProject = {
-  slug: "tapp",
-  label: "TAPP — product UI",
-  shot: "/images/projects/tapp.png",
+  slug: "cryptap",
+  label: "CrypTap — merchant POS",
+  shot: "/images/projects/cryptap/cover.webp",
   blurb:
-    "A SaaS platform that digitizes menus and powers contactless ordering for cafés, restaurants and hotels.",
-  metrics: ["40%↑ orders", "Real-time"],
-  tags: ["Next.js", "SaaS", "Hospitality"],
+    "A non-custodial crypto payment platform — in-store POS with a BLE hardware signing device, hosted e-commerce checkout and trustless on-chain settlement across 7 EVM chains and Solana.",
+  metrics: ["8 chains", "Non-custodial"],
+  tags: ["Web3", "Solana", "Hardware"],
 };
 
 /** Slugs of the projects featured on the landing "Selected work" section, in order. */
-export const featuredWorkSlugs = ["tapp", "letsgoapp", "solarsurge"];
+export const featuredWorkSlugs = ["cryptap", "tapp", "letsgoapp"];
 
 /** Short labels for the featured-work image badges, keyed by slug. */
 export const workShotLabels: Record<string, string> = {
+  cryptap: "CrypTap — merchant POS",
   tapp: "TAPP — product UI",
   letsgoapp: "LetsGo — mobile app",
   solarsurge: "SolarSurge — DePIN",
@@ -306,6 +307,7 @@ export const workShotLabels: Record<string, string> = {
 
 /** Tag chips for featured-work cards, keyed by slug. */
 export const workTags: Record<string, string[]> = {
+  cryptap: ["Web3", "Solana", "Payments"],
   tapp: ["SaaS", "Next.js", "Hospitality"],
   letsgoapp: ["Mobile", "AI", "Fitness"],
   solarsurge: ["Web3", "DePIN", "Energy"],

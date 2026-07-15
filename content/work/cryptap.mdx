@@ -1,0 +1,71 @@
+---
+title: "CrypTap – Non-Custodial Crypto Payment Platform (POS, Hardware, E-commerce)"
+publishedAt: "2026-07-15"
+summary: "The project I'm proudest of: a complete non-custodial crypto payment platform built end-to-end — smart contracts on 7 EVM chains and Solana, an in-store POS with a BLE hardware signing device and ESP32 firmware, a hosted e-commerce checkout with trustless permissionless settlement, WooCommerce/Shopify plugins, and merchant/owner/admin dashboards. CrypTap never holds, signs for, or transmits merchant funds — and I built every layer of it."
+tag: "Web3"
+images:
+  - "/images/projects/cryptap/cover.webp"
+  - "/images/projects/cryptap/owner.webp"
+  - "/images/projects/cryptap/merchant.webp"
+  - "/images/projects/cryptap/payment.webp"
+team:
+  - name: "Toni Dumancic"
+    role: "Architect & Full-Stack Developer (contracts, firmware, frontend, backend)"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://linkedin.com/in/tonidumancic"
+---
+
+## Overview
+
+**CrypTap** is a full crypto payment platform for real businesses — cafés, shops and online stores that want to accept crypto without handing their money to a middleman. Most "accept crypto" providers are effectively crypto banks: they receive funds in their own name, custody them, and pay the merchant out later. CrypTap is built on the opposite principle, and the entire architecture defends one invariant:
+
+> **CrypTap never holds, signs for, or transmits merchant funds.** Everything that touches money happens client-side and on-chain; the backend only tracks payment intents and verifies their status.
+
+There is no part of this platform I didn't build: the EVM contracts, the Solana program, the POS, the payment page, the hardware device integration and firmware, the e-commerce product with its settlement contracts and keeper, the store plugins and SDK, the dashboards, the admin panel and the backend.
+
+## On-chain foundation
+
+### EVM — 7 chains
+Deployed on **Polygon, Ethereum, BSC, Arbitrum, Optimism, Avalanche and Base**. Instead of deploying a full contract per payment, an `InvoiceV2` **factory** creates **minimal-proxy clones** (~200k gas per invoice, a fraction of a full deploy). Addresses are **CREATE2-predicted** from the payment parameters — the pay-to address exists *before* anything is on chain, so the customer can be shown a QR code instantly. Settlement is restricted `onlyMerchantOrDeployer`, native coins and ERC-20 (USDC/USDT/DAI…) both supported.
+
+### Solana
+A native **Anchor (Rust) program** — one PDA per invoice, supporting SOL and SPL tokens, with the same intent-tracking flow as EVM. Not a bridge or a wrapper: a first-class second contract stack.
+
+## In-store: POS + hardware
+
+- **Merchant POS** — a fully client-side web app. It creates the invoice on-chain, shows live payment status, and handles tips, tax and fiat conversion with real-time rates. Settling, cancelling and refunding all happen from the browser with the merchant's own key.
+- **CrypTap device** — a BLE hardware terminal (ESP32, custom firmware) that pairs with the POS and **signs every transaction on-device**. The private key never touches the browser, the network, or CrypTap. This is the difference between a demo and something a business can actually run.
+- **Customer payment page** — QR code with countdown, wallet deep links, live on-chain confirmation, and export/send-remotely options. Includes recovery flows for edge cases (funds received but not yet distributed) so no payment is ever stranded.
+
+## E-commerce: trustless settlement with zero merchant infrastructure
+
+Online stores break the POS assumptions — nobody is at the counter holding a key when a shopper pays at 3 AM. **CrypTap Commerce** solves it without ever taking custody:
+
+- **`CommerceSettler` contract (one per chain)** — every commerce invoice address is derived deterministically: `intentIdHash = keccak256(merchant, developer, token, amount, feeBps, nonce)`, and the factory predicts the clone address from it. A keeper that submits **wrong** parameters computes a *different* address that holds no funds — so settlement needs **no signatures, no attestations, no trust**.
+- **On-chain gas tank** — merchants pre-fund gas for their own settlements from the dashboard, keyed to their payout address; only they can withdraw. The keeper is reimbursed on-chain, *only when a settle actually distributed funds* (anti-grief), capped by the merchant's max gas price.
+- **Keeper** — a settle bot that finds funded checkouts and triggers settlement on EVM and Solana. It holds no merchant keys and custodies nothing; its telemetry is exposed in the owner dashboard.
+- **Hosted checkout + REST API** — machine-to-machine API keys, idempotent checkout creation, and **HMAC-signed outbound webhooks** so a store backend knows the moment a payment lands.
+- **Integrations** — **WooCommerce** and **Shopify** plugins, plus a **`commerce-js`** SDK for custom storefronts.
+
+## Operations layer
+
+- **Owner dashboard** — revenue analytics, device management, payout wallets, transaction history, sweeps, fee tiers and keeper telemetry.
+- **Admin panel** — merchants, users, transactions, logs and commerce oversight.
+- **Backend** — Flask + SQLAlchemy. It receives intents, stores them, and independently verifies their status on-chain with a checker and scheduler. It can *see* everything and *touch* nothing — by design it has no keys and no custody.
+
+## Security model in one breath
+
+Client-side signing everywhere; hardware key isolation on the BLE device; deterministic address binding instead of signed attestations; permissionless settlement that punishes wrong inputs economically instead of cryptographically; a backend that is a read-only observer of the chain.
+
+## Tech Stack
+
+- **Solidity (Foundry)** — factory + minimal-proxy invoice contracts, CommerceSettler, on 7 EVM chains
+- **Anchor / Rust** — Solana invoice program (PDAs, SOL + SPL)
+- **Next.js + TypeScript** — POS, payment page, hosted checkout, owner dashboard, admin panel
+- **Flask + SQLAlchemy** — intent tracking backend, on-chain checker, keeper
+- **ESP32 / BLE** — hardware signing terminal firmware
+- **ethers.js / @solana/web3.js** — all chain interaction, in the browser
+
+---
+
+Cryptography, hardware, smart contracts, plugins and plain old web engineering — one person, one coherent platform. This is the project I point to when someone asks what I can build.

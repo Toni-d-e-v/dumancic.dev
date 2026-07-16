@@ -182,7 +182,7 @@ export default function Home() {
               <div
                 style={{
                   position: "relative",
-                  aspectRatio: "16/10",
+                  aspectRatio: "16/9",
                   borderRadius: 14,
                   backgroundImage: `url('${featuredProject.shot}')`,
                   backgroundSize: "cover",

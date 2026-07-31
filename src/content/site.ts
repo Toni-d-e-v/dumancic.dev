@@ -289,7 +289,7 @@ export const featuredProject = {
   label: "CrypTap — merchant POS",
   shot: "/images/projects/cryptap/cover.webp",
   blurb:
-    "A non-custodial crypto payment platform — in-store POS with a BLE hardware signing device, hosted e-commerce checkout and trustless on-chain settlement across 7 EVM chains and Solana.",
+    "A non-custodial crypto payment platform — in-store POS with a dedicated hardware terminal, hosted e-commerce checkout and trustless on-chain settlement across 7 EVM chains and Solana.",
   metrics: ["8 chains", "Non-custodial"],
   tags: ["Web3", "Solana", "Hardware"],
 };

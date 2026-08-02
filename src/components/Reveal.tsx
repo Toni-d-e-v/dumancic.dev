@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { onIntroDone } from "@/lib/intro";
 
 type RevealProps = {
   children: React.ReactNode;
@@ -12,7 +13,12 @@ type RevealProps = {
 
 export function Reveal({ children, delay = 0, className, style }: RevealProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  const [inView, setInView] = useState(false);
+  // Blokovi u prvom ekranu čekaju da uvodna špica pusti sadržaj, inače
+  // odrade animaciju ispod nje i dočekaju posjetitelja već gotovi.
+  const [released, setReleased] = useState(false);
+
+  useEffect(() => onIntroDone(() => setReleased(true)), []);
 
   useEffect(() => {
     const el = ref.current;
@@ -24,7 +30,7 @@ export function Reveal({ children, delay = 0, className, style }: RevealProps) {
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (reduce || typeof IntersectionObserver === "undefined") {
-      setVisible(true);
+      setInView(true);
       return;
     }
 
@@ -32,7 +38,7 @@ export function Reveal({ children, delay = 0, className, style }: RevealProps) {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setVisible(true);
+            setInView(true);
             io.disconnect();
           }
         });
@@ -46,7 +52,7 @@ export function Reveal({ children, delay = 0, className, style }: RevealProps) {
   return (
     <div
       ref={ref}
-      className={`dd-reveal${visible ? " is-visible" : ""}${className ? " " + className : ""}`}
+      className={`dd-reveal${inView && released ? " is-visible" : ""}${className ? " " + className : ""}`}
       style={delay ? { ...style, transitionDelay: `${delay}ms` } : style}
     >
       {children}

@@ -187,7 +187,6 @@ export default function Home() {
                   backgroundImage: `url('${featuredProject.shot}')`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
-                  border: "1px solid rgba(14,14,14,0.06)",
                 }}
               >
        

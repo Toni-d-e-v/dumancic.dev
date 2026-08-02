@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { Hanken_Grotesk, Space_Mono } from "next/font/google";
 import "./globals.css";
 import IntroSplash from "@/components/IntroSplash";
@@ -60,6 +61,7 @@ export default function RootLayout({
         />
         <IntroSplash />
         {children}
+        <Analytics />
       </body>
     </html>
   );
